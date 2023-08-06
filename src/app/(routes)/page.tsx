@@ -1,6 +1,8 @@
 import getMenu from "@/actions/getMenu"
 import Image from "next/image";
 
+export const revalidate = 0;
+
 export default async function HomePage() {
   const menu = await getMenu()
   
