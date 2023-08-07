@@ -6,18 +6,20 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 interface ProductClienteProps {
-    product: Product
+    product: Product,
+    detailsColor: string;
 }
 
 const ProductCliente: React.FC<ProductClienteProps> = ({
-    product
+    product,
+    detailsColor
 }) => {
     const router = useRouter();
     return (
         <>
             <div className="relative  flex items-center justify-center p-6 border-b">
                 <div className="absolute left-2 cursor-pointer" onClick={() => router.back()}>
-                    <ChevronLeft className="h-9 w-9"/> 
+                    <ChevronLeft className="h-9 w-9" style={{ color: detailsColor}}/> 
                 </div>
                 <h1 className="font-medium uppercase text-sm sm:text-xl leading-5 text-center mx-8">
                     {product.name}
@@ -73,7 +75,7 @@ const ProductCliente: React.FC<ProductClienteProps> = ({
                                             </p>
                                         </div>
                                         <div className="mr-4">
-                                            <Plus className="w-8 h-8"/>
+                                            <Plus className="w-8 h-8"style={{ color: detailsColor }}/>
                                         </div>
                                     </div>
                                 ))}
