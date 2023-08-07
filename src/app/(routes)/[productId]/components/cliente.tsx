@@ -28,9 +28,12 @@ const ProductCliente: React.FC<ProductClienteProps> = ({
                 {!!product.images.length && (
                     <div className="w-full">
                         <div className=" relative h-full w-full overflow-hidden">
-                            <img
+                            <Image
+                                priority
                                 alt="Image"
                                 src={product?.images[0].url}
+                                width={768}
+                                height={384}
                                 className="object-cover w-full sm:max-h-96"
                             />
                         </div>
@@ -51,7 +54,7 @@ const ProductCliente: React.FC<ProductClienteProps> = ({
                 </div>
                 <div className="space-y-2">
                     {product.additionalItemCategories.map((additionalCategory) => (
-                        <div className="space-y-2">
+                        <div key={additionalCategory.id} className="space-y-2">
                             <div className="bg-neutral-200/50 px-4 py-2 leading-2">
                                 <h3 className="font-medium">{additionalCategory.name}</h3>
                                 <p className="text-sm text-neutral-500">{additionalCategory.description}</p>
@@ -61,7 +64,7 @@ const ProductCliente: React.FC<ProductClienteProps> = ({
                             </div>
                             <div className="px-4 divide-y">
                                 {additionalCategory.additionalItems.map((additionalItem) => (
-                                    <div className="flex justify-between items-center py-4">
+                                    <div key={additionalItem.id} className="flex justify-between items-center py-4">
                                         <div>
                                             <p className="text-sm sm:text-base">
                                                 {additionalItem.name}
