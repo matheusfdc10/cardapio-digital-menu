@@ -1,5 +1,5 @@
 import getProduct from "@/actions/getProduct";
-import ProductCliente from "./components/cliente";
+import ProductClient from "./components/client";
 import getRestaurant from "@/actions/getRestaurant";
 
 export const revalidate = 0;
@@ -18,7 +18,7 @@ const ProductPage: React.FC<ProductPageProps> = async ({
 
     return (
         <>
-            <ProductCliente product={product} detailsColor={restaurant.colorDetails}/>
+            <ProductClient product={product} detailsColor={restaurant.colorDetails}/>
         </>
     )
 }
