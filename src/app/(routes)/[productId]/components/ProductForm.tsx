@@ -147,7 +147,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
         <Form {...form}>
             <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="max-w-3xl mx-auto space-y-4 mb-24"
+                className="max-w-3xl mx-auto space-y-4 pb-24"
             >
                 {!!product.images.length && (
                     <div className="w-full">
