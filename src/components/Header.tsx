@@ -1,6 +1,11 @@
+"use client"
+import useCart from "@/hooks/useCart";
 import { Restaurant } from "@/types";
 import { ShoppingBasket } from "lucide-react";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 interface HeaderProps {
     data: Restaurant
@@ -9,6 +14,19 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({
     data
 }) => {
+    const [isMounted, setIsMountend] = useState(false);
+
+    useEffect(() => {
+        setIsMountend(true);
+    }, [])
+
+    const route = useRouter();
+    const cart = useCart();
+
+    if (!isMounted) {
+        return null;
+    }
+
 
     return (
         <header className="border-b w-full" style={{ backgroundColor: data.colorHeader }}>
@@ -30,15 +48,18 @@ const Header: React.FC<HeaderProps> = ({
                     )}
                 </div>
                 <div className="flex items-center justify-center">
-                    <div className="flex items-center rounded-full bg-black px-4 py-2 shadow hover:bg-black/80 cursor-pointer">
+                    <Button
+                        disabled={!cart.items.length}
+                        onClick={() => route.push('/cart')} 
+                        className="flex items-center rounded-full bg-black hover:bg-black/80">
                         <ShoppingBasket
                             size={24}
                             color="white"
                         />
                         <span className="ml-2 text-sm font-medium text-white">
-                            0
+                            {cart.items.length}
                         </span>
-                    </div>
+                    </Button>
                 </div>
             </div>
         </header>

@@ -10,6 +10,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import useCart from "@/hooks/useCart";
+import { useRouter } from "next/navigation";
 
 const itemSchema = z.object({
     id: z.string(),
@@ -18,13 +20,13 @@ const itemSchema = z.object({
     amount: z.number()
 })
 
-const categoryItemSchema = z.object({
-    id: z.string(),
-    name: z.string(),
-    description: z.string(),
-    maxQtdItems: z.number(),
-    additionalItems: z.array(itemSchema),
-})
+// const categoryItemSchema = z.object({
+//     id: z.string(),
+//     name: z.string(),
+//     description: z.string(),
+//     maxQtdItems: z.number(),
+//     additionalItems: z.array(itemSchema),
+// })
 
 const formSchema = z.object({
     id: z.string(),
@@ -53,6 +55,8 @@ const ProductForm: React.FC<ProductFormProps> = ({
     product,
     detailsColor
 }) => {
+    const router = useRouter();
+    const cart = useCart();
 
     const form = useForm<ProductFormValues>({
         resolver: zodResolver(formSchema),
@@ -63,7 +67,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
             name: product.name,
             comment: "",
             amount: 1,
-            url: product.images[0]?.url,
+            url: product.images[0]?.url || '',
             additionalItems: [],
             // categoryItem: product.additionalItemCategories.map((additionalCategory) => ({
             //     additionalItemCategories: additionalCategory,
@@ -76,8 +80,9 @@ const ProductForm: React.FC<ProductFormProps> = ({
 
     const onSubmit = async (data: ProductFormValues) => {
         try {
-            console.log(data)
-
+            cart.addItem(data);
+            router.refresh();
+            router.back();
         } catch(error) {
 
         }
@@ -119,6 +124,8 @@ const ProductForm: React.FC<ProductFormProps> = ({
             ])
         }
     }
+
+    console.log(form.formState.errors)
 
     const handleDeletAdditionalItem = (item: AdditionalItem) => {
         const items = form.getValues('additionalItems')
@@ -251,7 +258,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
                         name="comment"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Algum Comentário</FormLabel>
+                                <FormLabel>Algum Comentário?</FormLabel>
                                 <FormControl>
                                     <Textarea
                                         // error={form.formState.errors.comment}
