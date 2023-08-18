@@ -1,12 +1,22 @@
 "use client"
 
+import OrderModal from "@/components/modals/OrderModal";
 import { Button } from "@/components/ui/button";
 import useCart from "@/hooks/useCart";
+import { Restaurant } from "@/types";
 import { formatterCurrencey } from "@/utils/formatterCurrency";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
-const Summary = () => {
+interface SummaryProps {
+    restaurant: Restaurant
+}
+
+const Summary: React.FC<SummaryProps> = ({
+    restaurant
+}) => {
     const route = useRouter();
+    const [open, setOpen] = useState(false)
     const items = useCart((state) => state.items);
 
     const totalPrice = items.reduce((total, item) => {
@@ -20,6 +30,8 @@ const Summary = () => {
     }
 
     return (
+        <>
+        <OrderModal restaurant={restaurant} open={open} setOpen={() => setOpen(false)}/>
         <div className="mt-4 rounded-lg bg-neutral-50 px-4 py-6 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8">
             <h2 className="text-lg font-medium text-neutral-900">
                 Resumo do pedido
@@ -44,10 +56,11 @@ const Summary = () => {
                     <span className="font-bold">{formatterCurrencey.format(totalPrice)}</span>
                 </div>
             </div>
-            <Button disabled={items.length === 0} className="w-full mt-6">
+            <Button disabled={items.length === 0} onClick={() => setOpen(true)} className="w-full mt-6">
                 Finalizar compra
             </Button>
         </div>
+        </>
     )
 }
 

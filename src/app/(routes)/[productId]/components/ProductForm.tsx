@@ -125,7 +125,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
         }
     }
 
-    console.log(form.formState.errors)
+    // console.log(form.formState.errors)
 
     const handleDeletAdditionalItem = (item: AdditionalItem) => {
         const items = form.getValues('additionalItems')
@@ -175,7 +175,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
                         <h2 className="font-semibold text-xl leading-tight mb-2">
                             {product.name}
                         </h2>
-                        <p className="mb-3 text-neutral-500 leading-5">
+                        <p className="mb-3 text-neutral-500 leading-5 whitespace-pre-line">
                             {product.description}
                         </p>
                         <span className="text-green-500 text-lg font-medium">
@@ -187,15 +187,13 @@ const ProductForm: React.FC<ProductFormProps> = ({
                 <div className="space-y-2 border-b">
                     {product.additionalItemCategories.map((additionalCategory) => {
 
-
-
                         return(
                             <div key={additionalCategory.id} className="space-y-2">
                                 <div className="bg-neutral-200/50 px-4 py-2 leading-2">
                                     <h3 className="font-medium">{additionalCategory.name}</h3>
-                                    <p className="text-sm text-neutral-500">{additionalCategory.description}</p>
+                                    <p className="text-sm text-neutral-500 leading-4">{additionalCategory.description}</p>
                                     {additionalCategory.maxQtdItems > 0 && (
-                                        <span className="text-xs">Escolha até {additionalCategory.maxQtdItems} opções.</span>
+                                        <span className="text-xs leading-3">Escolha até {additionalCategory.maxQtdItems} opções.</span>
                                     )}
                                 </div>
                                 <div className="px-4 divide-y">
