@@ -37,7 +37,7 @@ const SummaryCart: React.FC<SummaryCartProps> = ({
     }
 
     return (
-        <div className="sticky bottom-0 sm:hidden  w-full z-50 bg-neutral-100 border-t-2">
+        <div className="sticky bottom-0 sm:hidden  w-full z-50 bg-neutral-100 border-t">
             <div className="max-w-screen-2xl mx-auto px-4 py-3 flex items-center justify-between">
                 <div>
                     <h4>Total</h4>

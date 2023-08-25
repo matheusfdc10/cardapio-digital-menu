@@ -12,7 +12,7 @@ const Footer: React.FC<FooterProps> = ({
     
     return (
         <footer className="w-full border-t">
-            <div className="w-full max-w-screen-2xl mx-auto px-4 py-8 sm:px-8 text-xs text-neutral-500 grid grid-cols-1 md:grid-cols-2 gap-2">
+            <div className="w-full max-w-screen-2xl mx-auto px-4 py-8 sm:px-8 text-xs text-neutral-500  grid grid-cols-1 md:grid-cols-2 gap-1">
                 <p>© Copyright 2023 - {restaurant.name}</p>
                 <p>E-mail: {restaurant.email}</p>
                 <p>WhatsApp: {restaurant.whatsapp}</p>

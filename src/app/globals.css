@@ -6,6 +6,7 @@ html,
 body,
 :root {
   @apply
+  min-h-screen
   h-auto
   bg-neutral-50
   text-neutral-950
