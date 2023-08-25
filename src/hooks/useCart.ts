@@ -40,15 +40,15 @@ const useCart = create(
             // }
 
             set({ items: [...get().items, data] });
-            toast({
-                title: 'Item adicionado no carrinho.'
-            });
+            // toast({
+            //     title: 'Item adicionado no carrinho.'
+            // });
         },
     removeItem: (index: number) => {
         set({ items: [...get().items.filter((item, i) => i !== index)] });
-        toast({
-            title: 'Item removido do carrinho'
-        });
+        // toast({
+        //     title: 'Item removido do carrinho'
+        // });
     },
     removeAll: () => set({ items: []}),
     }), {
