@@ -11,7 +11,7 @@ export const Category: React.FC<CategoryProps> = ({
   detailsColor,
 }) => {
   return (
-    <div className="space-y-4">
+    <section id={category.name} className="space-y-4">
       <div className="flex items-center gap-2">
         <div
           className="py-2 px-3 h-full"
@@ -28,6 +28,6 @@ export const Category: React.FC<CategoryProps> = ({
           <ProductCard key={product.id} product={product} />
         ))}
       </div>
-    </div>
+    </section>
   );
 };

@@ -154,7 +154,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
         <Form {...form}>
             <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="max-w-3xl mx-auto space-y-4 pb-24"
+                className="max-w-3xl mx-auto space-y-4 pb-24 space-y"
             >
                 {!!product.images.length && (
                     <div className="w-full">
@@ -189,7 +189,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
 
                         return(
                             <div key={additionalCategory.id} className="space-y-2">
-                                <div className="bg-neutral-200/50 px-4 py-2 leading-2">
+                                <div className="bg-neutral-200 px-4 py-2 leading-2 sticky top-[4.25rem] sm:top-[4.5rem] z-40">
                                     <h3 className="font-medium">{additionalCategory.name}</h3>
                                     <p className="text-sm text-neutral-500 leading-4">{additionalCategory.description}</p>
                                     {additionalCategory.maxQtdItems > 0 && (
@@ -270,7 +270,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
                         )}
                     />
                 </div>
-                <div className="h-20 fixed bottom-0 left-0 w-full bg-neutral-50 border-t">
+                <div className="h-20 fixed bottom-0 left-0 w-full bg-neutral-50 border-t z-[999]">
                     <div className="max-w-3xl mx-auto w-full h-full flex px-4 items-center justify-between">
                         <div className="flex items-center gap-2">
                             <Button

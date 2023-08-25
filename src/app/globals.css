@@ -6,7 +6,7 @@ html,
 body,
 :root {
   @apply
-  h-full
+  h-auto
   bg-neutral-50
   text-neutral-950
 }

@@ -15,6 +15,7 @@ const Header: React.FC<HeaderProps> = ({
     data
 }) => {
     const [isMounted, setIsMountend] = useState(false);
+    
 
     useEffect(() => {
         setIsMountend(true);
@@ -29,40 +30,45 @@ const Header: React.FC<HeaderProps> = ({
 
 
     return (
-        <header className="border-b w-full" style={{ backgroundColor: data.colorHeader }}>
-            <div className="flex items-center gap-4 h-20 px-4 py-3 max-w-screen-2xl mx-auto">
-                <div className="relative flex items-center h-full w-full">
-                    {data.logo ? (
-                        <Image
-                            fill
-                            objectFit="contain"
-                            objectPosition="left"
-                            alt="Logo"
-                            src={data?.logo}
-                            // className="object-contain "
-                        />
-                    ) : (
-                        <h1 className="text-3xl font-bold tracking-tight">
-                            {data.name}
-                        </h1>
-                    )}
+        <>
+            <header className="border-b w-full" style={{ backgroundColor: data.colorHeader }}>
+                <div className="flex items-center gap-4 h-20 px-4 py-3 max-w-screen-2xl mx-auto">
+                    <div className="relative flex items-center h-full w-full">
+                        {data.logo ? (
+                            <Image
+                                fill
+                                objectFit="contain"
+                                objectPosition="left"
+                                alt="Logo"
+                                src={data?.logo}
+                                className="cursor-pointer"
+                                onClick={() => route.push('/')}
+                            />
+                        ) : (
+                            <h1 onClick={() => route.push('/')} className="text-3xl font-bold tracking-tight cursor-pointer">
+                                {data.name}
+                            </h1>
+                        )}
+                    </div>
+                    <div className="hidden sm:block">
+                        <div className=" flex items-center justify-center">
+                            <Button
+                                disabled={!cart.items.length}
+                                onClick={() => route.push('/cart')} 
+                                className="flex items-center rounded-full bg-black hover:bg-black/80">
+                                <ShoppingBasket
+                                    size={24}
+                                    color="white"
+                                />
+                                <span className="ml-2 text-sm font-medium text-white">
+                                    {cart.items.length}
+                                </span>
+                            </Button>
+                        </div>
+                    </div>
                 </div>
-                <div className="flex items-center justify-center">
-                    <Button
-                        disabled={!cart.items.length}
-                        onClick={() => route.push('/cart')} 
-                        className="flex items-center rounded-full bg-black hover:bg-black/80">
-                        <ShoppingBasket
-                            size={24}
-                            color="white"
-                        />
-                        <span className="ml-2 text-sm font-medium text-white">
-                            {cart.items.length}
-                        </span>
-                    </Button>
-                </div>
-            </div>
-        </header>
+            </header>
+        </>
     )
 }
 
