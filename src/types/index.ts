@@ -47,6 +47,7 @@ export interface AdditionalItemCategory {
     name: string;
     description: string;
     maxQtdItems: number;
+    isRequired: boolean;
     additionalItems: AdditionalItem[]
 }
 

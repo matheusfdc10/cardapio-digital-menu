@@ -150,6 +150,28 @@ const ProductForm: React.FC<ProductFormProps> = ({
 
     const priceTotal = form.getValues('additionalItems').reduce((sum, item) => sum + item.price, product.price) * form.getValues('amount')
 
+    // Calcule o total de itens adicionais selecionados para cada categoria
+    const categoryTotals = product.additionalItemCategories.map((additionalCategory) => {
+        const amount = additionalCategory.additionalItems.reduce((sum, item) => {
+            const addedItems = form.getValues('additionalItems').find((i) => i.id === item.id);
+            if (!addedItems) return sum;
+            return sum + addedItems.amount;
+        }, 0);
+        console.log(additionalCategory)
+        return { categoryId: additionalCategory.id, total: amount, isRequired: additionalCategory.isRequired};
+    });
+
+    // Verifique se o botão "Adicionar" deve ser desativado
+    const isSubmitDisabled = categoryTotals.some((categoryTotal) => {
+        const additionalCategory = product.additionalItemCategories.find(
+            (cat) => cat.id === categoryTotal.categoryId
+        );
+        if (categoryTotal.isRequired) {
+            return additionalCategory && categoryTotal.total !== additionalCategory.maxQtdItems;
+        }
+        return additionalCategory?.isRequired
+    });
+
     return (
         <Form {...form}>
             <form
@@ -190,12 +212,17 @@ const ProductForm: React.FC<ProductFormProps> = ({
 
                             return(
                                 <div key={additionalCategory.id} className="space-y-2">
-                                    <div className="bg-neutral-200 px-4 py-2 leading-2 sticky top-[4.25rem] sm:top-[4.5rem] z-40">
-                                        <h3 className="font-medium">{additionalCategory.name}</h3>
-                                        <p className="text-sm text-neutral-500 leading-4">{additionalCategory.description}</p>
-                                        {additionalCategory.maxQtdItems > 0 && (
-                                            <span className="text-xs leading-3">Escolha até {additionalCategory.maxQtdItems} opções.</span>
-                                        )}
+                                    <div className="bg-neutral-200 px-4 py-2 leading-2 sticky top-[4.25rem] sm:top-[4.5rem] z-40 flex justify-between items-center">
+                                        <div>
+                                            <h3 className="font-medium">{additionalCategory.name}</h3>
+                                            <p className="text-sm text-neutral-500 leading-4">{additionalCategory.description}</p>
+                                            {additionalCategory.maxQtdItems > 0 && (
+                                                <span className="text-xs leading-3">Escolha {!additionalCategory.isRequired && 'até'} {additionalCategory.maxQtdItems} {additionalCategory.maxQtdItems === 1 ? 'opção' : 'opções'}.</span>
+                                            )}
+                                        </div>
+                                        <span className="text-sm font-semibold">
+                                            {additionalCategory.isRequired ? 'Obrigatório' : "Opcional"}
+                                        </span>
                                     </div>
                                     <div className="px-4 divide-y">
                                         {additionalCategory.additionalItems.map((additionalItem) => {
@@ -253,6 +280,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
                             )
                         })}
                     </div>
+
                     <div className="px-4 ">
                         <FormField 
                             control={form.control}
@@ -274,6 +302,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
                         />
                     </div>
                 </div>
+
                 <div className="sticky bottom-0 h-20 left-0 w-full bg-neutral-100 border-t z-[999]">
                     <div className="max-w-3xl mx-auto w-full h-full flex px-4 items-center justify-between">
                         <div className="flex items-center gap-2">
@@ -302,6 +331,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
                             type="submit"
                             className="flex justify-between gap-3 items-center"
                             style={{ backgroundColor: detailsColor}}
+                            disabled={isSubmitDisabled}
                         >
                             Adicionar
                             <span>{formatterCurrencey.format(priceTotal)}</span>

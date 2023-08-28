@@ -1,7 +1,7 @@
 "use client"
 
 import * as z from "zod";
-import Modal from "@/components/ui/modal";
+import { Modal } from "@/components/ui/modal";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -146,7 +146,7 @@ const OrderModal: React.FC<OrderModalProps> = ( {
         }
         try {
             const date = new Date()
-            const codding = `${date.getDate()}${date.getMonth() + 1}${date.getFullYear()}${date.getHours()}${date.getMinutes()}${totalPrice.toString().replace('.', '')}`
+            const codding = `${date.getHours()}${date.getMinutes()}${date.getDate()}${date.getMonth() + 1}${date.getFullYear()}${extractAmount(totalPrice)}`
             window.location.assign(`https://wa.me/55${restaurant.whatsapp}/?text=*%23%20${codding}*%0a%0a*Pedido🍴*%0a${itemsText}%0a%0a*SubTotal:* ${formatterCurrencey.format(totalPrice)}%0a*Taxa de entrega:* Grátis%0a*Total:* ${formatterCurrencey.format(totalPrice)}%0a%0a*Forma de pagamento:*%0a${formPaymentText}%0a%0a*Nome:* ${nameText}%0a*Celular:* ${phoneText}%0a*Email:* ${emailText}%0a%0a*Endereço:*%0a${addressText}`)
             cart.removeAll();
             // cart.addItem(data);
@@ -253,7 +253,7 @@ const OrderModal: React.FC<OrderModalProps> = ( {
                                                     disabled={isLoading}
                                                     placeholder="Ex: 101"
                                                     {...field}
-                                                    {...form.register(field.name, { required: true, valueAsNumber: true })}
+                                                    {...form.register(field.name, { required: true, valueAsNumber: true, onChange: () => form.trigger(), })}
                                                 />
                                             </FormControl>
                                             <FormMessage />
@@ -405,7 +405,7 @@ const OrderModal: React.FC<OrderModalProps> = ( {
 
                     {step === STEPS.FORMPAYMENT && (
                         <div className="w-full">
-                            <span>Valor total {formatterCurrencey.format(totalPrice)}</span>
+                            <span className="text-lg font-semibold">Valor total {formatterCurrencey.format(totalPrice)}</span>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 mt-4">
                                 <FormField 
                                     control={form.control}
@@ -487,7 +487,7 @@ const OrderModal: React.FC<OrderModalProps> = ( {
 
                     {step === STEPS.SUMMARY && (
                         <div>
-                            <h1>Resumo do pedido</h1>
+                            <h1 className="text-lg font-semibold">Resumo do pedido</h1>
                             <div>
                                 {items.map((item) => (
                                     <div 
@@ -514,13 +514,11 @@ const OrderModal: React.FC<OrderModalProps> = ( {
                                     </div>
                                 ))}
                             </div>
-                            <div>
+                            <div className="mt-4">
                                 <p><strong>Nome:</strong> {form.getValues("name")}</p>
                                 <p><strong>Celular:</strong> {form.getValues("phone")}</p>
                                 <p><strong>Email:</strong> {form.getValues("email")}</p>
                                 <p><strong>Endereço:</strong> {form.getValues('address.streetAddress')}, {form.getValues('address.number')}, {form.getValues('address.complement') && `${form.getValues('address.complement')},`} {form.getValues('address.neighborhood')} - {form.getValues('address.city')}/{form.getValues('address.state')}</p>
-                            </div>
-                            <div>
                                 <p><strong>Forma de pagamento:</strong> {form.getValues('formPayment') === "Dinheiro" ? `${form.getValues('formPayment')} - ${form.getValues('isNeedCashChange') === 'Sim' ? `troco para ${formatterCurrencey.format(form.getValues('changeInCash'))}` : 'sem troco'}` : form.getValues('formPayment')}</p>
                             </div>
                         </div>
@@ -550,3 +548,10 @@ const OrderModal: React.FC<OrderModalProps> = ( {
 }
 
 export default OrderModal;
+
+
+function extractAmount(value: number) {
+    const stringValue = value.toFixed(2); // Converte o número para string com duas casas decimais
+    const digitsOnly = stringValue.replace(/\D/g, ''); // Remove todos os caracteres não numéricos
+    return parseInt(digitsOnly, 10); // Converte a string de volta para um número inteiro
+}
