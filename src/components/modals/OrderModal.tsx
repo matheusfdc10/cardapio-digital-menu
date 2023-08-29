@@ -147,7 +147,8 @@ const OrderModal: React.FC<OrderModalProps> = ( {
         try {
             const date = new Date()
             const codding = `${date.getHours()}${date.getMinutes()}${date.getDate()}${date.getMonth() + 1}${date.getFullYear()}${extractAmount(totalPrice)}`
-            window.location.assign(`https://wa.me/55${restaurant.whatsapp}/?text=*%23%20${codding}*%0a%0a*Pedido🍴*%0a${itemsText}%0a%0a*SubTotal:* ${formatterCurrencey.format(totalPrice)}%0a*Taxa de entrega:* Grátis%0a*Total:* ${formatterCurrencey.format(totalPrice)}%0a%0a*Forma de pagamento:*%0a${formPaymentText}%0a%0a*Nome:* ${nameText}%0a*Celular:* ${phoneText}%0a*Email:* ${emailText}%0a%0a*Endereço:*%0a${addressText}`)
+            // window.location.assign(`https://wa.me/55${restaurant.whatsapp}/?text=*%23%20${codding}*%0a%0a*Pedido🍴*%0a${itemsText}%0a%0a*SubTotal:* ${formatterCurrencey.format(totalPrice)}%0a*Taxa de entrega:* Grátis%0a*Total:* ${formatterCurrencey.format(totalPrice)}%0a%0a*Forma de pagamento:*%0a${formPaymentText}%0a%0a*Nome:* ${nameText}%0a*Celular:* ${phoneText}%0a*Email:* ${emailText}%0a%0a*Endereço:*%0a${addressText}`)
+            window.location.href = (`https://wa.me/55${restaurant.whatsapp}/?text=*%23%20${codding}*%0a%0a*Pedido🍴*%0a${itemsText}%0a%0a*SubTotal:* ${formatterCurrencey.format(totalPrice)}%0a*Taxa de entrega:* Grátis%0a*Total:* ${formatterCurrencey.format(totalPrice)}%0a%0a*Forma de pagamento:*%0a${formPaymentText}%0a%0a*Nome:* ${nameText}%0a*Celular:* ${phoneText}%0a*Email:* ${emailText}%0a%0a*Endereço:*%0a${addressText}`)
             cart.removeAll();
             // cart.addItem(data);
             // router.refresh();
