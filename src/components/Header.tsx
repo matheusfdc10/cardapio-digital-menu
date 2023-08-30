@@ -32,7 +32,7 @@ const Header: React.FC<HeaderProps> = ({
     return (
         <>
             <header className="border-b w-full" style={{ backgroundColor: data.colorHeader }}>
-                <div className="flex items-center gap-4 h-20 px-4 py-3 max-w-screen-2xl mx-auto">
+                <div className="flex items-center justify-between gap-4 h-24 p-4 max-w-screen-2xl mx-auto">
                     <div className="relative flex items-center h-full w-full">
                         {data.logo ? (
                             <Image

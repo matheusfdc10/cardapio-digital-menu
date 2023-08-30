@@ -149,7 +149,7 @@ const OrderModal: React.FC<OrderModalProps> = ( {
             const codding = `${date.getHours()}${date.getMinutes()}${date.getDate()}${date.getMonth() + 1}${date.getFullYear()}${extractAmount(totalPrice)}`
             // window.location.assign(`https://wa.me/55${restaurant.whatsapp}/?text=*%23%20${codding}*%0a%0a*Pedido🍴*%0a${itemsText}%0a%0a*SubTotal:* ${formatterCurrencey.format(totalPrice)}%0a*Taxa de entrega:* Grátis%0a*Total:* ${formatterCurrencey.format(totalPrice)}%0a%0a*Forma de pagamento:*%0a${formPaymentText}%0a%0a*Nome:* ${nameText}%0a*Celular:* ${phoneText}%0a*Email:* ${emailText}%0a%0a*Endereço:*%0a${addressText}`)
             // const message = `*%23%20${codding}*%0a%0a*Pedido🍴*%0a${itemsText}%0a%0a*SubTotal:* ${formatterCurrencey.format(totalPrice)}%0a*Taxa de entrega:* Grátis%0a*Total:* ${formatterCurrencey.format(totalPrice)}%0a%0a*Forma de pagamento:*%0a${formPaymentText}%0a%0a*Nome:* ${nameText}%0a*Celular:* ${phoneText}%0a*Email:* ${emailText}%0a%0a*Endereço:*%0a${addressText}`
-            
+
             const message = `*#${codding}*\n\n*Pedido🍴*\n${itemsText}\n\n*SubTotal:* ${formatterCurrencey.format(totalPrice)}\n*Taxa de entrega:* Grátis\n*Total:* ${formatterCurrencey.format(totalPrice)}\n\n*Forma de pagamento:*\n${formPaymentText}\n\n*Nome:* ${nameText}\n*Celular:* ${phoneText}\n*Email:* ${emailText}\n\n*Endereço:*\n${addressText}`
             window.location.href = (`https://api.whatsapp.com/send?phone=55${restaurant.whatsapp}&text=${encodeURIComponent(message)}`)
             cart.removeAll(); 
@@ -161,15 +161,36 @@ const OrderModal: React.FC<OrderModalProps> = ( {
         }
     }
 
+    function haversineDistance(lat1: any, lon1: any, lat2: any, lon2: any) {
+        const R = 6371; // Raio médio da Terra em quilômetros
+        const dLat = (lat2 - lat1) * (Math.PI / 180);
+        const dLon = (lon2 - lon1) * (Math.PI / 180);
+        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                  Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+                  Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        const distance = R * c;
+        return distance;
+      }
+
     const handleGetAddress = async (cep: string) => {
         if (cep.length === 8) {
             try {
-                const response = await axios.get(`https://brasilapi.com.br/api/cep/v2/${cep}`)
+                const response1 = await axios.get(`https://brasilapi.com.br/api/cep/v2/${restaurant.address.zipCode}`)
 
-                form.setValue('address.streetAddress', response.data.street)
-                form.setValue('address.neighborhood', response.data.neighborhood)
-                form.setValue('address.city', response.data.city)
-                form.setValue('address.state', response.data.state)
+                const response2 = await (await axios.get(`https://brasilapi.com.br/api/cep/v2/${cep}`))
+                
+                if (haversineDistance(response1.data.location.coordinates.latitude, response1.data.location.coordinates.longitude, response2.data.location.coordinates.latitude, response2.data.location.coordinates.longitude) > restaurant.deliveryDistance) {
+                    return toast({
+                        variant: "destructive",
+                        description: "Não atendemos neste endereço.",
+                    });
+                }
+                
+                form.setValue('address.streetAddress', response2.data.street)
+                form.setValue('address.neighborhood', response2.data.neighborhood)
+                form.setValue('address.city', response2.data.city)
+                form.setValue('address.state', response2.data.state)
             } catch(error) {
                 toast({
                     variant: "destructive",
@@ -184,6 +205,8 @@ const OrderModal: React.FC<OrderModalProps> = ( {
         }
         form.trigger();
     }
+
+    // axios.get()
     
     return (
         <Modal
@@ -234,7 +257,7 @@ const OrderModal: React.FC<OrderModalProps> = ( {
                                             <FormControl>
                                                 <Input
                                                     error={form.formState.errors.address?.streetAddress}
-                                                    disabled={isLoading}
+                                                    disabled
                                                     placeholder="Ex: Rua São João"
                                                     {...field}
                                                     {...form.register(field.name, { required: true })}
@@ -291,7 +314,7 @@ const OrderModal: React.FC<OrderModalProps> = ( {
                                         <FormControl>
                                             <Input
                                                 error={form.formState.errors.address?.neighborhood}
-                                                disabled={isLoading}
+                                                disabled
                                                 placeholder="Ex: Vila Velha"
                                                 {...field}
                                                 {...form.register(field.name, { required: true })}
@@ -310,7 +333,7 @@ const OrderModal: React.FC<OrderModalProps> = ( {
                                         <FormControl>
                                             <Input
                                                 error={form.formState.errors.address?.city}
-                                                disabled={isLoading}
+                                                disabled
                                                 placeholder="Ex: Rio de Janeiro"
                                                 {...field}
                                                 {...form.register(field.name, { required: true })}
@@ -329,7 +352,7 @@ const OrderModal: React.FC<OrderModalProps> = ( {
                                         <FormControl>
                                             <Input
                                                 error={form.formState.errors.address?.state}
-                                                disabled={isLoading}
+                                                disabled
                                                 placeholder="Ex: RJ"
                                                 {...field}
                                                 {...form.register(field.name, { required: true, maxLength: 2 })}

@@ -19,6 +19,7 @@ export interface Restaurant {
     email: string;
     colorHeader: string;
     colorDetails: string;
+    deliveryDistance: number;
     address: Address;
 }
 
