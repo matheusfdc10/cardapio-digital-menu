@@ -179,7 +179,7 @@ const OrderModal: React.FC<OrderModalProps> = ( {
                 const response1 = await axios.get(`https://brasilapi.com.br/api/cep/v2/${restaurant.address.zipCode}`)
 
                 const response2 = await (await axios.get(`https://brasilapi.com.br/api/cep/v2/${cep}`))
-                
+                console.log(restaurant.deliveryDistance)
                 if (haversineDistance(response1.data.location.coordinates.latitude, response1.data.location.coordinates.longitude, response2.data.location.coordinates.latitude, response2.data.location.coordinates.longitude) > restaurant.deliveryDistance) {
                     return toast({
                         variant: "destructive",
