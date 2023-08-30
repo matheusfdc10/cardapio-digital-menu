@@ -151,7 +151,7 @@ const OrderModal: React.FC<OrderModalProps> = ( {
             // const message = `*%23%20${codding}*%0a%0a*Pedido🍴*%0a${itemsText}%0a%0a*SubTotal:* ${formatterCurrencey.format(totalPrice)}%0a*Taxa de entrega:* Grátis%0a*Total:* ${formatterCurrencey.format(totalPrice)}%0a%0a*Forma de pagamento:*%0a${formPaymentText}%0a%0a*Nome:* ${nameText}%0a*Celular:* ${phoneText}%0a*Email:* ${emailText}%0a%0a*Endereço:*%0a${addressText}`
             const message = `*#${codding}*\n\n*Pedido🍴*\n${itemsText}\n\n*SubTotal:* ${formatterCurrencey.format(totalPrice)}\n*Taxa de entrega:* Grátis\n*Total:* ${formatterCurrencey.format(totalPrice)}\n\n*Forma de pagamento:*\n${formPaymentText}\n\n*Nome:* ${nameText}\n*Celular:* ${phoneText}\n*Email:* ${emailText}\n\n*Endereço:*\n${addressText}`
             window.location.href = (`https://api.whatsapp.com/send?phone=55${restaurant.whatsapp}&text=${encodeURIComponent(message)}`)
-            cart.removeAll();
+            cart.removeAll(); 
             // cart.addItem(data);
             // router.refresh();
             // router.back();
