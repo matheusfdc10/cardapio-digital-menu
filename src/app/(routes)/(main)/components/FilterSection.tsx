@@ -3,7 +3,7 @@
 import { Menu } from "@/types"
 import { Link } from 'react-scroll/modules'
 import { motion } from 'framer-motion'
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 interface FilterSectionProps {
     menu: Menu[];
@@ -17,11 +17,17 @@ const FilterSection: React.FC<FilterSectionProps> = ({
     const myRef = useRef<HTMLDivElement>(null);
     const [width, setWidth] = useState(0)
 
-    useEffect(() => {
-        if(myRef?.current?.scrollWidth && myRef?.current?.offsetWidth) {
-            setWidth(myRef?.current?.scrollWidth - myRef?.current?.offsetWidth)
+    const updateWidth = useCallback(() => {
+        if (myRef.current) {
+            const scrollWidth = myRef.current.scrollWidth;
+            const offsetWidth = myRef.current.offsetWidth;
+            setWidth(scrollWidth - offsetWidth);
         }
-    }, [myRef.current?.offsetWidth, myRef?.current?.scrollWidth])
+    }, []);
+
+    useEffect(() => {
+        updateWidth();
+    }, [updateWidth, myRef.current?.offsetWidth, myRef.current?.scrollWidth]);
     
     return (
         <div className="sticky top-0 px-4 py-5 bg-neutral-50 w-full z-50 border-b overflow-hidden mx-auto max-w-screen-2xl">

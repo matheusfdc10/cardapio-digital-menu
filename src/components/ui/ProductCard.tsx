@@ -17,7 +17,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     return (
         <div
             onClick={() => router.push(`/${product.id}`)}
-            className="cursor-pointer border rounded-md p-3 flex justify-between gap-4 shadow-md hover:border-neutral-300/80"
+            className="cursor-pointer border rounded-md p-4 flex justify-between gap-4 shadow-md hover:border-neutral-300/80 "
         >
             <div className="flex flex-col justify-between gap-4">
                 <h3 className="font-semibold text-lg leading-tight line-clamp-2 overflow-hidden">
@@ -31,13 +31,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                 </span>
             </div>
             {!!product?.images?.length  && (
-                <div className="w-36 h-28 aspect-square rounded-md bg-gray-100 relative my-3">
-                <Image
-                    fill
-                    alt="image"
-                    src={product?.images[0]?.url}
-                    className="aspect-square object-cover rounded-md"
-                />
+                <div className="w-auto h-28 aspect-square rounded-md bg-gray-100 relative my-3 overflow-hidde">
+                    <Image
+                        fill
+                        alt="image"
+                        src={product?.images[0]?.url}
+                        sizes="112px"
+                        className="object-cover rounded-md"
+                    />
                 </div>
             )}
         </div>
