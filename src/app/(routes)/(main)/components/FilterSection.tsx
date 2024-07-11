@@ -2,8 +2,15 @@
 
 import { Menu } from "@/types";
 import { Link } from 'react-scroll/modules';
-// import { motion } from 'framer-motion';
-import { useRef, useState } from "react";
+import { useRef, useState, useCallback, useEffect } from "react";
+
+function debounce(func: (...args: any[]) => void, wait: number) {
+    let timeout: NodeJS.Timeout;
+    return function(...args: any[]) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func(...args), wait);
+    };
+}
 
 interface FilterSectionProps {
     menu: Menu[];
@@ -20,14 +27,16 @@ const FilterSection: React.FC<FilterSectionProps> = ({
     const [startY, setStartY] = useState(0);
     const [scrollLeft, setScrollLeft] = useState(0);
 
-    const scrollToActive = (index: number) => {
+    const scrollToActive = useCallback((index: number) => {
         if (listRef.current) {
             const activeItem = listRef.current.children[index] as HTMLElement;
             const activeItemCenter = activeItem.offsetLeft + activeItem.offsetWidth / 2;
             const scrollOffset = activeItemCenter - listRef.current.offsetWidth / 2;
             listRef.current.scrollTo({ left: scrollOffset, behavior: 'smooth' });
         }
-    };
+    }, []);
+
+    const debouncedScrollToActive = useCallback(debounce(scrollToActive, 200), [scrollToActive]);
 
     const handleMouseDown = (e: React.MouseEvent) => {
         e.preventDefault();
@@ -38,7 +47,6 @@ const FilterSection: React.FC<FilterSectionProps> = ({
     };
 
     const handleTouchStart = (e: React.TouchEvent) => {
-        e.preventDefault();
         setIsDragging(true);
         const touch = e.touches[0];
         setStartX(touch.pageX - (listRef.current?.offsetLeft || 0));
@@ -56,9 +64,8 @@ const FilterSection: React.FC<FilterSectionProps> = ({
         listRef.current!.scrollLeft = scrollLeft - walkX;
     };
 
-    const handleTouchMove = (e: React.TouchEvent) => {
+    const handleTouchMove = (e: TouchEvent) => {
         if (!isDragging) return;
-        e.preventDefault();
         const touch = e.touches[0];
         const x = touch.pageX - (listRef.current?.offsetLeft || 0);
         const y = touch.pageY - (listRef.current?.offsetTop || 0);
@@ -79,6 +86,18 @@ const FilterSection: React.FC<FilterSectionProps> = ({
         setIsDragging(false);
     };
 
+    useEffect(() => {
+        const ref = listRef.current;
+
+        if (ref) {
+            ref.addEventListener('touchmove', handleTouchMove, { passive: false });
+
+            return () => {
+                ref.removeEventListener('touchmove', handleTouchMove);
+            };
+        }
+    }, [handleTouchMove]);
+
     return (
         <div className="sticky top-0 h-16 bg-neutral-50 w-full z-50 border-b overflow-hidden mx-auto max-w-screen-2xl cursor-grab">
             <div
@@ -89,7 +108,6 @@ const FilterSection: React.FC<FilterSectionProps> = ({
                 onMouseUp={handleMouseUp}
                 onMouseLeave={handleMouseLeave}
                 onTouchStart={handleTouchStart}
-                onTouchMove={handleTouchMove}
                 onTouchEnd={handleTouchEnd}
                 style={{ userSelect: 'none' }}
             >
@@ -105,7 +123,7 @@ const FilterSection: React.FC<FilterSectionProps> = ({
                         smooth={true} 
                         duration={500}
                         onSetActive={(to, element) => {
-                            scrollToActive(index)
+                            debouncedScrollToActive(index);
                         }}
                     >
                         {item.name}
