@@ -16,11 +16,11 @@ export default async function HomePage() {
     <>
       <FilterSection menu={menu} detailsColor={restaurant.colorDetails}/>
       <Container>
-        <div className="space-y-8">
+        {/* <div> */}
           {menu.map((category) => (
             <Category key={category.id} category={category} detailsColor={restaurant.colorDetails}/>
           ))}
-        </div>
+        {/* </div> */}
       </Container>
       <Footer restaurant={restaurant}/>
       <SummaryCart colorDetails={restaurant.colorDetails}/>

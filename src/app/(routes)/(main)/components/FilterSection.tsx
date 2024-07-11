@@ -99,10 +99,10 @@ const FilterSection: React.FC<FilterSectionProps> = ({
     }, [handleTouchMove]);
 
     return (
-        <div className="sticky top-0 h-16 bg-neutral-50 w-full z-50 border-b overflow-hidden mx-auto max-w-screen-2xl cursor-grab">
+        <div className="sticky top-0 h-16 bg-neutral-50 w-full z-50 border-b overflow-hidden mx-auto max-w-screen-2xl">
             <div
                 ref={listRef}
-                className="font-semibold text-lg flex items-center gap-2 h-full uppercase overflow-hidden px-3"
+                className="font-semibold text-lg flex items-center gap-2 h-full uppercase overflow-hidden px-3 cursor-grab"
                 onMouseDown={handleMouseDown}
                 onMouseMove={handleMouseMove}
                 onMouseUp={handleMouseUp}
