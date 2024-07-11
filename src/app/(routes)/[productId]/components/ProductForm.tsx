@@ -157,7 +157,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
             if (!addedItems) return sum;
             return sum + addedItems.amount;
         }, 0);
-        console.log(additionalCategory)
+        // console.log(additionalCategory)
         return { categoryId: additionalCategory.id, total: amount, isRequired: additionalCategory.isRequired};
     });
 

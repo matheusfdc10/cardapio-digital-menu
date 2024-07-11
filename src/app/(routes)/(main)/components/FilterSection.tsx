@@ -114,16 +114,19 @@ const FilterSection: React.FC<FilterSectionProps> = ({
                 {menu.map((item, index) => (
                     <Link
                         key={item.id}
-                        className="whitespace-nowrap cursor-pointer transition p-2"
-                        activeClass='scale-105'
-                        activeStyle={{ color: detailsColor }}
+                        className="whitespace-nowrap border-b border-b-transparent cursor-pointer transition p-2 h-full flex justify-center items-center"
+                        activeClass='border-b-2'
+                        activeStyle={{ 
+                            color: detailsColor,
+                            borderColor: detailsColor
+                        }}
                         to={item.name}
                         offset={-82}
-                        spy={true} 
+                        spy={true}
                         smooth={true} 
-                        duration={500}
+                        duration={400}
                         onSetActive={(to, element) => {
-                            debouncedScrollToActive(index);
+                            debouncedScrollToActive(index)
                         }}
                     >
                         {item.name}
